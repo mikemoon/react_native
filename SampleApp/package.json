@@ -1,0 +1,59 @@
+{
+  "name": "SampleApp",
+  "version": "0.0.2",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@babel/preset-typescript": "^7.16.7",
+    "@react-native-async-storage/async-storage": "^1.16.1",
+    "@react-native-community/netinfo": "^8.0.0",
+    "@react-native-masked-view/masked-view": "^0.2.6",
+    "@react-navigation/native": "^6.0.8",
+    "@react-navigation/stack": "^6.1.1",
+    "android": "0.0.8",
+    "mobx": "^6.4.1",
+    "mobx-react": "^7.3.0",
+    "nodejs": "0.0.0",
+    "react": "17.0.2",
+    "react-intl": "^5.24.6",
+    "react-native": "^0.61.4",
+    "react-native-gesture-handler": "^2.2.0",
+    "react-native-infinite-swiper": "^2.0.0",
+    "react-native-localization": "^2.1.6",
+    "react-native-modal": "^12.1.0",
+    "react-native-pager-view": "^5.4.9",
+    "react-native-paper": "^4.11.2",
+    "react-native-reanimated": "^2.4.1",
+    "react-native-safe-area-context": "^3.3.2",
+    "react-native-screens": "^3.10.2",
+    "react-native-swiper": "^1.6.0-rc.3",
+    "react-native-webview": "^11.17.2",
+    "react-query": "^3.34.16",
+    "react-simple-pull-to-refresh": "^1.3.0",
+    "react-swipe-refresh": "^1.0.0",
+    "recyclerlistview": "^3.0.5",
+    "yarn": "^1.22.17"
+  },
+  "devDependencies": {
+    "@babel/core": "7.16.7",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/runtime": "7.16.7",
+    "@react-native-community/eslint-config": "2.0.0",
+    "babel-jest": "26.6.3",
+    "eslint": "^8.9.0",
+    "jest": "26.6.3",
+    "metro-react-native-babel-preset": "0.66.2",
+    "react-native-viewpager": "^0.2.13",
+    "react-test-renderer": "17.0.2",
+    "typescript": "^4.5.4"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
