@@ -26,6 +26,13 @@ const SplashScreen = ({navigation}) => {
                 console.log("storage setState true")
                 setIsFirstRun(true);
             }
+
+            setTimeout(() => {
+                navigation.replace('PermissionScreen' , {
+                    screen: 'PermissionScreen',
+                    info: 'information'
+                } )
+            },3000)
         });
 
         return () => {
