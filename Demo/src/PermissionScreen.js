@@ -98,7 +98,9 @@ const PermissionScreen = ({navigation}) => {
                 {' '}{intl.formatMessage({id:"permissions_select", defaultMessage:""})} </Text>
                 <Text style={{marginTop:3, fontSize:12}}>{intl.formatMessage({id:"permissions_location_info", defaultMessage:""})}</Text>
             </View>
-
+            {/* 
+            <DescriptionLayout title={intl.formatMessage({id:"location_info", defaultMessage:""})} desc={intl.formatMessage({id:"permissions_location_info", defaultMessage:""})}/>
+ */}
             <Text style={{marginTop:30, fontSize:12, marginLeft:25}}>{intl.formatMessage({id:"permissions_desc_tail", defaultMessage:""})}</Text>
 
             <TouchableOpacity
@@ -110,11 +112,12 @@ const PermissionScreen = ({navigation}) => {
                         } 
                         style={{
                             alignSelf:'center',
-                            backgroundColor: 'rgb(87,174,198)',
+                            backgroundColor: '#1E98D7',
                             padding: 20,
                             marginTop: 28,
                             borderRadius: 10,
-                            width:'80%'
+                            width:'80%',
+                            height:60
                         }}>
                         <Text style={{fontSize: 15, textAlign: 'center', 
                             color: 'white'}}>{intl.formatMessage({id:"next", defaultMessage:""})}</Text>
@@ -122,6 +125,16 @@ const PermissionScreen = ({navigation}) => {
         </View>
     )
 
+}
+
+const DescriptionLayout=(title, desc) =>{
+    return(
+        <View style={{marginTop:30, marginLeft:30}}>
+                <Text style={{fontWeight:'bold', width:'50%',  marginTop:5}}>{title}
+                {' '}{intl.formatMessage({id:"permissions_select", defaultMessage:""})} </Text>
+                <Text style={{marginTop:3, fontSize:12}}>{desc}</Text>
+            </View>
+    )
 }
 
 export async function requestAndroidPermission(permissions) 
