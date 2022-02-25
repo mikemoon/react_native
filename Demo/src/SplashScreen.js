@@ -17,8 +17,8 @@ const SplashScreen = ({navigation}) => {
 
     useEffect(()=>{
         //component mount
-        let isFirstRun = await storage.getStorage(storage.KEY.IS_FIRST_RUN);
-        console.log("storage get isFirstRun = "+isFirstRun)
+        storage.getStorage(storage.KEY.IS_FIRST_RUN).then(function(isFirstRun){
+            console.log("storage get isFirstRun = "+isFirstRun)
             if(isFirstRun != 'true'){
                 isFirstRun = 'true';
                 storage.setStorage(storage.KEY.IS_FIRST_RUN, isFirstRun);
@@ -26,9 +26,7 @@ const SplashScreen = ({navigation}) => {
                 console.log("storage setState true")
                 setIsFirstRun(true);
             }
-        // 함수안에서 처리시    
-        /* storage.getStorage(storage.KEY.IS_FIRST_RUN).then(function(isFirstRun){
-        }); */
+        });
 
         return () => {
             //component unmount
@@ -38,9 +36,7 @@ const SplashScreen = ({navigation}) => {
 
     return (
         <View style={{justifyContent:'center', flex:1}}>
-            { (isFirstRunState != true) &&
             <Image  style={{width:130, height:130, alignSelf:'center'}} resizeMode='contain' source={require('../assets/fantoo_intro.png')}/>
-            }
         </View>
     )
 }

@@ -35,6 +35,7 @@ import krMsg from "./src/strings/kr.json";
 import enMsg from "./src/strings/en.json";
 
 import SplashScreen from './src/SplashScreen';
+import PermissionScreen from './src/PermissionScreen';
 
 
 const Section = ({children, title}): Node => {

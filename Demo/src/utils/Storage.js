@@ -3,7 +3,6 @@ import  AsyncStorage  from '@react-native-async-storage/async-storage'
 
 const obj = {};
 
-obj.KEY_IS = "is_run";
 obj.KEY = {
     IS_FIRST_RUN : 'is_first_run'
 }
