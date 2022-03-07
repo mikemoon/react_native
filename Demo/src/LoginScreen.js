@@ -8,38 +8,50 @@ import {
   } from 'react-native';
 import { useIntl } from "react-intl";
 import { TouchableHighlight } from 'react-native-gesture-handler';
+import { inject, observer } from 'mobx-react';
+import MobXStore from './MobXStore.js';
+import { observable } from 'mobx';
+import languaguesList from './strings/languaguesList.js';
+import LocaleItem from './LocaleItem.js';
 
-const LoginScreen = (navigation) => {
+const LoginScreen = observer((navigation) => {
+
+    const {localeStore} = MobXStore();
 
     const storage = require('../src/utils/Storage.js');
     const intl = useIntl();
 
-
-    let currentLang = 'english';
     console.log("current langu = "+intl.locale)
 
     const [showLanguageSet, setShowLanguageSet] = useState(false);
+    const [currentLang, setLang] = useState('');
     
-    const languaguesList = [
-        LocaleItem('ko', '한국어', ''),
-        LocaleItem('en', 'English', ''),
-        LocaleItem('jp', '日本語', ''),
-        LocaleItem('zh-CN', '中国語(簡体)', ''),
-        LocaleItem('zh-TW', '中国語(繁體)', ''),
-        LocaleItem('id', 'Bahasa Indonesia', ''),
-        LocaleItem('es', 'español', ''),
-        LocaleItem('fr', 'français', ''),
-        LocaleItem('ru', 'Русский', '')
-        ]        
+    const langList = languaguesList;
     
     const onLanguageItemSelect=(localeItem)=>{
         console.log('onLanguageItemSelect = '+localeItem.itemName)
         storage.setStorage("lang", localeItem.code).then(result =>{
-            intl.locale = result;
+            localeStore.setLocale(localeItem.code);
+            console.log('onLanguageItemSelect done mobx store ='+JSON.stringify(localeStore))
+            intl.locale = localeItem.code;
+            setLang(localeItem.itemName)
             setShowLanguageSet(false)
-            window.location.reload();
+            //window.location.reload();
         })
     }
+
+    useEffect(()=>{
+        for(let i = 0; i < languaguesList.length; i++){
+            if(languaguesList[i].code == intl.locale){
+                setLang(languaguesList[i].itemName)
+                break;
+            }
+        }
+        return () => {
+            //component unmount
+        };
+        }, []
+        );
 
     return(
         <View>
@@ -63,7 +75,7 @@ const LoginScreen = (navigation) => {
             {showLanguageSet &&
             <View style={{borderStyle: 'solid', borderWidth:2, zIndex:3, elevation:3, position:'absolute', 
                 backgroundColor:'white', alignSelf:'flex-end', marginTop:70}}>
-                <LocaleSelector languagueList={languaguesList} onItemSelect={onLanguageItemSelect} />
+                <LocaleSelector languagueList={langList} onItemSelect={onLanguageItemSelect} />
             </View>
             }
 
@@ -79,7 +91,7 @@ const LoginScreen = (navigation) => {
            </View> 
         </View>
     )
-}
+})
 
 const LocaleSelector = ({languagueList, onItemSelect}) =>{
     return (
@@ -104,12 +116,6 @@ const LocaleSelector = ({languagueList, onItemSelect}) =>{
     )
 }
 
-const LocaleItem =(code, name, imageUrl) =>{
-        return {
-            code: code,
-            itemName: name,
-            imgUrl:imageUrl
-        }
-}
+
 
 export default LoginScreen

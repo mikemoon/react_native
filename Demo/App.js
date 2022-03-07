@@ -5,10 +5,10 @@
  * @format
  * @flow strict-local
  */
+
 import "intl";
 import "intl/locale-data/jsonp/en";
 import 'intl/locale-data/jsonp/id';
-
 
 import { Platform } from "react-native";
 
@@ -35,14 +35,14 @@ import { IntlProvider } from "react-intl";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import krMsg from "./src/strings/kr.json";
-import enMsg from "./src/strings/en.json";
 
 import SplashScreen from './src/SplashScreen';
 import PermissionScreen from './src/PermissionScreen';
 import LoginScreen from './src/LoginScreen';
 import MobXStore from './src/MobXStore';
-import { Provider } from "mobx-react";
+import { Provider, useObserver } from "mobx-react";
+
+import languaguesList from './src/strings/languaguesList.js';
 
 
 const Section = ({children, title}): Node => {
@@ -72,40 +72,31 @@ const Section = ({children, title}): Node => {
 };
 
 const Stack = createStackNavigator();
-let locale = "en";
-const messages = { "en": enMsg, ko: krMsg}[locale];
 //https://npm.io/package/react-intl-auto-translator
 
+
 const App: () => Node = () => {
+  
+  const {localeStore} = MobXStore();
+
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  const [lang, setLang] = useState(locale);
-  const [messageLang, setMessageLang] = useState(messages);
-
-  const storage = require('./src/utils/Storage.js');
-
-  console.log("App  lang messages  = "+JSON.stringify(messages));
-  const changeToLanguage = (langCode) => {
-    console.log("changeToLanguage  langCode = "+langCode);
-    setLang(langCode);
-  }
-
+  const storage = require('./src/utils/Storage.js');  
 
   storage.getStorage("lang").then(result =>{
     console.log("storage get lang = "+result);
     if(result != null){
-      setMessageLang({ "en": enMsg, ko: krMsg}[result]);
-      setLang(result);
+      localeStore.setLocale(result)
     }
   })
   
-  return (
-    <Provider mobxStore={MobXStore}>
-    <IntlProvider locale={lang} messages={messageLang} defaultLocale="en">
+  return useObserver(()=>(
+    <IntlProvider locale={localeStore.locale} messages={localeStore.message} defaultLocale="en">
+      <Provider localeStore={localeStore}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Start" screenOptions={{headerShown: false}}>
           <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ title: '' }}/> 
@@ -113,9 +104,10 @@ const App: () => Node = () => {
           <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ title: '' }}/>
         </Stack.Navigator>  
       </NavigationContainer> 
+      </Provider>
     </IntlProvider>
-    </Provider>
-  );
+    
+  ));
 };
 
 const styles = StyleSheet.create({

@@ -9,7 +9,7 @@ obj.KEY = {
 
 obj.setStorage = async(key,  value)=>{
     try{
-        console.log("storage setStorage  "+value+", key = "+key+"")
+        console.log("storage setStorage  "+value+", key = "+key)
         await AsyncStorage.setItem(key, value)
     }catch(e){
 

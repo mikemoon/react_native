@@ -1,7 +1,7 @@
 {
     "unregisterd_member": "Unregistered member",
     "invalid_login_info": "Login information is wrong",
-    "permissions_title": "편리한 서비스 이용을 위해 아래 접근 권한을 허용해 주세요.",
+    "permissions_title": "Please allow the following access rights for convenient service use.",
     "camera": "Camera",
     "permissions_camera": "프로필 사진, 커뮤니티/클럽 포스트 작성, 노래방 동영상 촬영",
     "picture_media_file": "사진/미디어/파일",
