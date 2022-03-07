@@ -3,9 +3,14 @@ import {
     Text,
     View,
     Image,
+    Button,
+    StyleSheet,
     TouchableOpacity,
     Platform
   } from 'react-native';
+import { LocalSvg } from 'react-native-svg';
+import recentLoginFrontMark from '../assets/normal_u83.svg';
+  
 import { useIntl } from "react-intl";
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { inject, observer } from 'mobx-react';
@@ -36,9 +41,10 @@ const LoginScreen = observer((navigation) => {
             intl.locale = localeItem.code;
             setLang(localeItem.itemName)
             setShowLanguageSet(false)
-            //window.location.reload();
         })
     }
+
+    const [recentlyLoginAccountName, setRecentlyLoginAccountName] = useState('');
 
     useEffect(()=>{
         for(let i = 0; i < languaguesList.length; i++){
@@ -52,6 +58,17 @@ const LoginScreen = observer((navigation) => {
         };
         }, []
         );
+
+
+    const login = (account) =>{
+        console.log('login account = '+account+"  , navi = "+JSON.stringify(navigation.navigation))
+        if(account == 'guest'){
+            navigation.navigation.navigate('Main' , {
+                screen: 'BottomNav',
+                info: 'information'
+            } ) 
+        }
+    }
 
     return(
         <View>
@@ -84,8 +101,33 @@ const LoginScreen = observer((navigation) => {
             <Text style={{textAlign:'center', marginTop:20}}>{intl.formatMessage({id:"login_center_desc", defaultMessage:""})}</Text>    
             
             {/* 최근 로그인  */}
-            <View>
+            <View style={{flexDirection:'row', marginTop:50, alignItems:'center', justifyContent:'center'}}>
+                <LocalSvg asset={recentLoginFrontMark}/>
+                <Text style={{marginLeft:3}}>{intl.formatMessage({id:"recent_login_account", defaultMessage:""})}</Text>
+                <Text >{recentlyLoginAccountName}</Text>
+            </View>
 
+            {/* 최근 로그인버튼 */}
+            <View style={{marginTop:10}}>
+                <TouchableOpacity
+                    onPress={()=>{login}}
+                    >
+                    <View  title=''
+                    style={styles.button} />
+                    {/* GoogleSigninButton 
+                    구글 로긴 API 버튼 사용 필요
+                    */}
+                </TouchableOpacity>
+            </View>
+
+
+            <View style={{
+                alignItems: 'center',}}>
+                <TouchableOpacity
+                    onPress={()=>{login("guest")}}
+                    >
+                <Text style={{marginTop:200 }}>{intl.formatMessage({id:"guest_in", defaultMessage:""})}</Text>
+                </TouchableOpacity>                    
             </View>
 
            </View> 
@@ -116,6 +158,20 @@ const LocaleSelector = ({languagueList, onItemSelect}) =>{
     )
 }
 
-
+const styles = StyleSheet.create({
+    button:{
+        height:40,
+        marginLeft:25,
+        marginRight:25,
+        padding: 2,
+        borderWidth: 1,
+        solid: '#797979',
+        backgroundColor:'#ffffff',
+        box:'border-box',
+        color: '#333333',
+        textAlign : 'center',
+        line:'normal'
+    }
+  });
 
 export default LoginScreen

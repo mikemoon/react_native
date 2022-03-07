@@ -32,9 +32,9 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import { IntlProvider } from "react-intl";
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, TabActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import SplashScreen from './src/SplashScreen';
 import PermissionScreen from './src/PermissionScreen';
@@ -43,7 +43,8 @@ import MobXStore from './src/MobXStore';
 import { Provider, useObserver } from "mobx-react";
 
 import languaguesList from './src/strings/languaguesList.js';
-
+import MainScreen from "./src/MainScreen";
+import ChatScreen from "./src/ChatScreen";
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -73,6 +74,7 @@ const Section = ({children, title}): Node => {
 
 const Stack = createStackNavigator();
 //https://npm.io/package/react-intl-auto-translator
+const Tab = createBottomTabNavigator();
 
 
 const App: () => Node = () => {
@@ -102,13 +104,23 @@ const App: () => Node = () => {
           <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ title: '' }}/> 
           <Stack.Screen name="PermissionScreen" component={PermissionScreen} options={{ title: '' }}/>
           <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ title: '' }}/>
-        </Stack.Navigator>  
+          <Stack.Screen name="Main" component={BottomNav} options={{ title: '' }}/>
+        </Stack.Navigator> 
       </NavigationContainer> 
       </Provider>
     </IntlProvider>
     
   ));
 };
+
+const BottomNav = ()=>{
+  return (
+    <Tab.Navigator>
+            <Tab.Screen name="MainScreen" component={MainScreen} />
+            <Tab.Screen name="ChatScreen" component={ChatScreen} />
+          </Tab.Navigator> 
+  )
+}
 
 const styles = StyleSheet.create({
   sectionContainer: {
