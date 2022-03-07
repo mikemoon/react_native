@@ -6,9 +6,13 @@
  * @flow strict-local
  */
 import "intl";
-import { Platform } from "react-native";
 import "intl/locale-data/jsonp/en";
-import React from 'react';
+import 'intl/locale-data/jsonp/id';
+
+
+import { Platform } from "react-native";
+
+import React, {useState} from 'react';
 import type {Node} from 'react';
 import {
   ScrollView,
@@ -36,6 +40,9 @@ import enMsg from "./src/strings/en.json";
 
 import SplashScreen from './src/SplashScreen';
 import PermissionScreen from './src/PermissionScreen';
+import LoginScreen from './src/LoginScreen';
+import MobXStore from './src/MobXStore';
+import { Provider } from "mobx-react";
 
 
 const Section = ({children, title}): Node => {
@@ -65,8 +72,9 @@ const Section = ({children, title}): Node => {
 };
 
 const Stack = createStackNavigator();
-const locale = "en";
-const messages = { "en": enMsg, kr: krMsg}[locale];
+let locale = "en";
+const messages = { "en": enMsg, ko: krMsg}[locale];
+//https://npm.io/package/react-intl-auto-translator
 
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -75,16 +83,38 @@ const App: () => Node = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  const [lang, setLang] = useState(locale);
+  const [messageLang, setMessageLang] = useState(messages);
+
+  const storage = require('./src/utils/Storage.js');
+
+  console.log("App  lang messages  = "+JSON.stringify(messages));
+  const changeToLanguage = (langCode) => {
+    console.log("changeToLanguage  langCode = "+langCode);
+    setLang(langCode);
+  }
+
+
+  storage.getStorage("lang").then(result =>{
+    console.log("storage get lang = "+result);
+    if(result != null){
+      setMessageLang({ "en": enMsg, ko: krMsg}[result]);
+      setLang(result);
+    }
+  })
   
   return (
-    <IntlProvider locale={locale} messages={messages}>
+    <Provider mobxStore={MobXStore}>
+    <IntlProvider locale={lang} messages={messageLang} defaultLocale="en">
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Start" screenOptions={{headerShown: false}}>
           <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ title: '' }}/> 
           <Stack.Screen name="PermissionScreen" component={PermissionScreen} options={{ title: '' }}/>
+          <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ title: '' }}/>
         </Stack.Navigator>  
       </NavigationContainer> 
     </IntlProvider>
+    </Provider>
   );
 };
 
