@@ -6,13 +6,18 @@
  * @flow strict-local
  */
 
+//언어변경
 import "intl";
 import "intl/locale-data/jsonp/en";
 import 'intl/locale-data/jsonp/id';
+import { IntlProvider } from "react-intl";
 
-import { Platform } from "react-native";
+import languaguesList from './src/strings/languaguesList.js';
 
-import React, {useState} from 'react';
+//구글로그인
+import { GoogleSignin } from '@react-native-community/google-signin';
+
+import React, {useState, useEffect} from 'react';
 import type {Node} from 'react';
 import {
   ScrollView,
@@ -21,6 +26,7 @@ import {
   Text,
   useColorScheme,
   View,
+  Platform
 } from 'react-native';
 
 import {
@@ -31,7 +37,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { IntlProvider } from "react-intl";
+
 import { NavigationContainer, TabActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -42,50 +48,22 @@ import LoginScreen from './src/LoginScreen';
 import MobXStore from './src/MobXStore';
 import { Provider, useObserver } from "mobx-react";
 
-import languaguesList from './src/strings/languaguesList.js';
+
 import MainScreen from "./src/MainScreen";
 import ChatScreen from "./src/ChatScreen";
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
 
 const Stack = createStackNavigator();
 //https://npm.io/package/react-intl-auto-translator
 const Tab = createBottomTabNavigator();
-
+const IOS_GOOGLE_CLIENT_ID = '382755949407-68i7mnl4avi2j2cms9u0l3pjt3drlld1.apps.googleusercontent.com';
+const AOS_GOOGLE_CLIENT_ID = '382755949407-9cusqc1i86ou6859vqbn5bcanq843vth.apps.googleusercontent.com';
 
 const App: () => Node = () => {
   
   const {localeStore} = MobXStore();
 
   const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
 
   const storage = require('./src/utils/Storage.js');  
 
@@ -95,6 +73,23 @@ const App: () => Node = () => {
       localeStore.setLocale(result)
     }
   })
+
+  useEffect(()=>{
+    //구글 로그인 초기화 시작
+    let googleClientId = AOS_GOOGLE_CLIENT_ID;
+    if(Platform.OS === 'ios'){
+      googleClientId = IOS_GOOGLE_CLIENT_ID;
+    }
+    const socialGoogleConfigure = async()=>{
+      await GoogleSignin.configure({
+        webClientId: googleClientId
+      });
+      console.log("socialGoogleConfigure")
+    }
+    socialGoogleConfigure();
+    //구글 로그인 초기화 끝
+  },[])
+
   
   return useObserver(()=>(
     <IntlProvider locale={localeStore.locale} messages={localeStore.message} defaultLocale="en">
