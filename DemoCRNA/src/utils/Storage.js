@@ -1,3 +1,4 @@
+//Unused code, just for ref react study
 import  AsyncStorage  from '@react-native-async-storage/async-storage'
 
 
@@ -30,4 +31,23 @@ obj.getStorage = async(key)=>{
     
 }
 
-module.exports = obj;
+const Storage = ()=>{
+
+    const setStorage = async(key, value) =>{
+        try{
+            console.log("storage setStorage  "+value+", key = "+key)
+            await AsyncStorage.setItem(key, value)
+        }catch(e){
+
+        }
+    }
+
+    const getStorage = async(key) =>{
+        console.log("storage getStorage get key : "+key)
+        return await AsyncStorage.getItem(key);
+    }
+}
+
+export default Storage
+
+//module.exports = obj;

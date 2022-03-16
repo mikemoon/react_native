@@ -1,4 +1,4 @@
-package com.rndeep.fns_fantoo;
+package com.rntest.test;
 
 import android.os.Build;
 import android.os.Bundle;

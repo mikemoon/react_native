@@ -132,7 +132,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.rndeep.fns_fantoo'
+        applicationId 'com.rntest.test'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

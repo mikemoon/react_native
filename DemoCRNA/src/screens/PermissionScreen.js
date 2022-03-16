@@ -7,10 +7,11 @@ import {
     Platform
   } from 'react-native';
 import { useIntl } from "react-intl";
-import {check, checkMultiple, requestMultiple, PERMISSIONS, RESULTS} from 'react-native-permissions';
+//import {check, checkMultiple, requestMultiple, PERMISSIONS, RESULTS} from 'react-native-permissions';
 
-const REQ_PERMISSIONS = [PERMISSIONS.ANDROID.CAMERA, PERMISSIONS.ANDROID.READ_CONTACTS, 
-    PERMISSIONS.ANDROID.RECORD_AUDIO, PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
+
+
+let rnPermissionsObj, REQ_PERMISSIONS;    
 
 const PermissionScreen = ({navigation}) => {
 
@@ -20,18 +21,25 @@ const PermissionScreen = ({navigation}) => {
     useEffect(()=>{
         //mount
         const isIOS = (Platform.OS === 'ios');
-
-
-        if(isIOS){
-            
-        }else{//android
-
-            checkMultiple(REQ_PERMISSIONS).then((statuses) => {
+        const isAOS = (Platform.OS == 'android')  
+        console.log("os = "+isIOS+" , aos = "+isAOS+", "+Platform.OS);
+        if(isIOS || isAOS){
+            const {check, checkMultiple, requestMultiple, PERMISSIONS, RESULTS} = React.lazy(
+                ()=> import('react-native-permissions')
+              )
+              console.log("permissionObj = "+JSON.stringify(PERMISSIONS));
+              REQ_PERMISSIONS = [PERMISSIONS.ANDROID.CAMERA, 
+                PERMISSIONS.ANDROID.READ_CONTACTS, 
+                PERMISSIONS.ANDROID.RECORD_AUDIO, 
+                PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
+                if(isAOS){
+                    checkMultiple(REQ_PERMISSIONS).then((statuses) => {
                 console.log('Camera', statuses[PERMISSIONS.ANDROID.CAMERA]);
                 console.log('READ_CONTACTS', statuses[PERMISSIONS.ANDROID.READ_CONTACTS]);
                 console.log('RECORD_AUDIO', statuses[PERMISSIONS.ANDROID.RECORD_AUDIO]);
                 console.log('ACCESS_FINE_LOCATION', statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]);
-              });
+              });         
+            }   
         }
     return () => {
         //component unmount
@@ -103,11 +111,11 @@ const checkAndroidPermission = async(permission) => {
 
 async function requestAndroidPermission(permissions, navigation) 
 {
-    requestMultiple(permissions).then((statuses) => {
-            console.log('Camera', statuses[PERMISSIONS.ANDROID.CAMERA]);
-            console.log('READ_CONTACTS', statuses[PERMISSIONS.ANDROID.READ_CONTACTS]);
-            console.log('RECORD_AUDIO', statuses[PERMISSIONS.ANDROID.RECORD_AUDIO]);
-            console.log('ACCESS_FINE_LOCATION', statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]);
+    rnPermissionsObj.requestMultiple(permissions).then((statuses) => {
+            console.log('Camera', statuses[rnPermissionsObj.PERMISSIONS.ANDROID.CAMERA]);
+            console.log('READ_CONTACTS', statuses[rnPermissionsObj.PERMISSIONS.ANDROID.READ_CONTACTS]);
+            console.log('RECORD_AUDIO', statuses[rnPermissionsObj.PERMISSIONS.ANDROID.RECORD_AUDIO]);
+            console.log('ACCESS_FINE_LOCATION', statuses[rnPermissionsObj.PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]);
             moveToLogin(navigation);
       });
 }
