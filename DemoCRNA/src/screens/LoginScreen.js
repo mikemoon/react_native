@@ -106,15 +106,7 @@ const LoginScreen = ({navigation}) => {
         );
 
 
-    const login = (account) =>{
-        console.log('login account = '+account+"  , navi = "+JSON.stringify(navigation.navigation))
-        if(account == 'guest'){
-            navigation.navigation.navigate('Main' , {
-                screen: 'BottomNav',
-                info: 'information'
-            } ) 
-        }
-    }
+    
 
     const responseGoogle = (response) => {
         console.log("responseGoogle"+response);
@@ -141,7 +133,7 @@ const LoginScreen = ({navigation}) => {
                 //alert("google login failed")
             }
             if(success){
-                moveToMain();
+                login("google");
                 //getAuthCode(userInfo);
             }
         }catch(e){
@@ -183,12 +175,7 @@ const LoginScreen = ({navigation}) => {
             // Do something with request error
             return Promise.reject(error);
           });
-        axios.post(APIServerURL.baseUrl+APIServerURL.get_a1_AuthCode, params, axiosConfig)/* .interceptors.request.use(
-            request => {
-                console.log('Starting Request', JSON.stringify(request, null, 2))
-                return request
-            }
-        ) */
+        axios.post(APIServerURL.baseUrl+APIServerURL.get_a1_AuthCode, params, axiosConfig)
         .then(function (response){
             console.log("result = "+JSON.stringify(response))
         }).catch(function (error){
@@ -207,12 +194,12 @@ const LoginScreen = ({navigation}) => {
         })
     }
 
-    const moveToMain = () =>{
-        console.log("moveToLogin");
-        navigation.replace('Main', {
-            screen: 'Main',
-                                  param: ''
-          })
+    const login = (account) =>{
+        console.log('login account = '+account)
+        navigation.navigate('Main' , {
+            screen: 'BottomNav',
+            info: 'information'
+        } ) 
     }
 
     return(

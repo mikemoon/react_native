@@ -1,28 +1,29 @@
-import React, {useEffect} from 'react';
-//import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import React, {useEffect, useState} from 'react';
 
 import {
-    Button
+    Button,
+    View
   } from 'react-native';
 
 let GoogleSignin = null;
-
+let GoogleSigninButton = null;
 
 const GoogleSignInCustomButton = ({onResponseGoogle}) =>{
 
+    const [importedButton, setImportedButton] = useState(false);
 
     useEffect(()=>{
         //component mount
         import('@react-native-google-signin/google-signin').then((module) => {
             GoogleSignin = module.GoogleSignin;
-        });
-
+            GoogleSigninButton = module.GoogleSigninButton;
+            setImportedButton(true);
+        })
         return () => {
             //component unmount
         };
         }, []
         );
-    
     
 
     const onGoogleButtonPress = async () =>{
@@ -53,7 +54,15 @@ const GoogleSignInCustomButton = ({onResponseGoogle}) =>{
             console.log("GoogleSignin module is null")
         }
     }
-    return <Button  title='구글로그인' onPress={onGoogleButtonPress}/>
+    //GoogleSigninButton import하면 웹에서 에러가 발생하여 os체크후 늦게 rendering
+    //known이슈 : button로그인 text가 기기 언어 설정으로 표시됨, 모듈에서 언어 변경지원이 없어 custom디자인으로 표시해야 할듯?
+    //https://github.com/react-native-google-signin/google-signin/issues/938
+    return( 
+            <View style={{alignSelf:'center'}}>
+                {importedButton && <GoogleSigninButton onPress={onGoogleButtonPress}/>}
+            </View>
+        )
+    
 }
 
-export default GoogleSignInCustomButton;
+export default GoogleSignInCustomButton

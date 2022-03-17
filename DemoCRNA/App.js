@@ -29,7 +29,7 @@ import MobXStore from './src/utils/MobXStore';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-import {STORAGE} from './src/constants/Values'
+import {STORAGE, DEV} from './src/constants/Values'
 
 import SplashScreen from './src/screens/SplashScreen';
 import PermissionScreen from './src/screens/PermissionScreen';
@@ -55,6 +55,10 @@ export default function App() {
   )
   })
   getLang()
+
+  if(DEV) {
+    import('./src/utils/ReactotronConfig').then(() => console.log('Reactotron Configured'))
+  }
 
   useEffect(()=>{
     if(Platform.OS == "android" || Platform.OS == "ios"){

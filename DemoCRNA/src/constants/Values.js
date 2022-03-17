@@ -1,5 +1,5 @@
 
-
+export const DEV = true;
 
 export const STORAGE = {
     key_lang : "lang",
@@ -16,4 +16,6 @@ export const APIServerURL = {
     baseUrl : "http://193.122.104.29:8121",
     get_a1_AuthCode : "/ft_auth/get_a1_AuthCode",
     get_a2_AccessToken : "/ft_auth/get_a2_AccessToken"
-} 
+}
+
+
